@@ -1,7 +1,8 @@
 
-export const pokemonsRoute = `${pokemonAPI}/pokemon?limit=5000`;
-export const pokemonRoute = `${pokemonAPI}/pokemon`;
-export const pokemonSpeciesRoute = `${pokemonAPI}/pokemon-species`;
+export const pokemonsRoute = `{https://pokeapi.co/api/v2/pokemon/ditto}/pokemon?limit=5000`;
+export const pokemonRoute = `{https://pokeapi.co/api/v2/pokemon/ditto}/pokemon`;
+export const pokemonSpeciesRoute = `{https://pokeapi.co/api/v2/pokemon/ditto}/pokemon-species`;
+
 
 export const pokemonTabs = {
   description: "description",

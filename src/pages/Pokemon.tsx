@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Wrapper from "../sections/Wrapper";
 import { useParams } from "react-router-dom";
 import { defaultImages, images } from "../utils";
-import { extractColors } from "extract-colors";
+// import { extractColors } from "extract-colors";
 import axios from "axios";
 import Evolution from "./Pokemon/Evolution";
 import Locations from "./Pokemon/Locations";
