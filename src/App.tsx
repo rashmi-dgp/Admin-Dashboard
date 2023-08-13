@@ -1,70 +1,76 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Navbar from "./sections/Navbar";
-import Footer from "./sections/Footer";
+import Home from "./pages/home/Home";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import Users from "./pages/users/Users";
+import Products from "./pages/products/Products";
+import Navbar from "./components/navbar/Navbar";
+import Footer from "./components/footer/Footer";
+import Menu from "./components/menu/Menu";
+import Login from "./pages/login/Login";
+import "./styles/global.scss";
+import User from "./pages/user/User";
+import Product from "./pages/product/Product";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
-import Background from "./components/Background";
-import "./scss/index.scss";
-import { Suspense, lazy, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { firebaseAuth } from "./utils/firebaseConfig";
-import { useAppDispatch, useAppSelector } from "./app/hooks";
-import { clearToasts, setUserStatus } from "./app/slices/AppSlice";
-import { ToastContainer, ToastOptions, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Loader from "./components/Loader";
 
-const Search = lazy(() => import("./pages/Search"));
-const MyList = lazy(() => import("./pages/MyList"));
-const About = lazy(() => import("./pages/About"));
-const Compare = lazy(() => import("./pages/Compare"));
-const Pokemon = lazy(() => import("./pages/Pokemon"));
+const queryClient = new QueryClient();
 
-export default function App() {
-  const { toasts } = useAppSelector(({ app }) => app);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    onAuthStateChanged(firebaseAuth, (currentUser) => {
-      if (currentUser) {
-        dispatch(setUserStatus({ email: currentUser.email as string }));
-      }
-    });
-  }, [dispatch]);
-  useEffect(() => {
-    if (toasts.length) {
-      const toastOptions: ToastOptions = {
-        position: "bottom-right",
-        autoClose: 2000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-      };
-      toasts.forEach((message: string) => {
-        toast(message, toastOptions);
-      });
-      dispatch(clearToasts());
-    }
-  }, [toasts, dispatch]);
-
-  return (
-    <div className="main-container">
-      <Background />
-      <BrowserRouter>
-        <Suspense fallback={<Loader />}>
-          <div className="app">
-            <Navbar />
-            <Routes>
-              <Route element={<Search />} path="/search" />
-              <Route element={<MyList />} path="/list" />
-              <Route element={<About />} path="/about" />
-              <Route element={<Compare />} path="/compare" />
-              <Route element={<Pokemon />} path="/pokemon/:id" />
-              <Route element={<Navigate to="/pokemon/1" />} path="*" />
-            </Routes>
-            <Footer />
-            <ToastContainer />
+function App() {
+  const Layout = () => {
+    return (
+      <div className="main">
+        <Navbar />
+        <div className="container">
+          <div className="menuContainer">
+            <Menu />
           </div>
-        </Suspense>
-      </BrowserRouter>
-    </div>
-  );
+          <div className="contentContainer">
+            <QueryClientProvider client={queryClient}>
+              <Outlet />
+            </QueryClientProvider>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  };
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/users",
+          element: <Users />,
+        },
+        {
+          path: "/products",
+          element: <Products />,
+        },
+        {
+          path: "/users/:id",
+          element: <User />,
+        },
+        {
+          path: "/products/:id",
+          element: <Product />,
+        },
+      ],
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 }
+
+export default App;

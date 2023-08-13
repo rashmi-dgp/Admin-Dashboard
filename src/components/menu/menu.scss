@@ -1,0 +1,46 @@
+@import "../../styles/variables.scss";
+@import "../../styles/responsive.scss";
+.menu{
+    .item{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 20px;
+        min-height: 0;
+    }
+    .title{
+        font-size: 10px;
+        font-weight: 200;
+        color: $soft-color;
+        text-transform: uppercase;
+
+        @include lg{
+            display: none;
+          }
+    
+    }
+
+    .listItem{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        &:hover{
+            background-color: $soft-bg;
+
+        }
+        height: auto;
+        &:hover {
+            background-color: $soft-bg;
+          }
+    // only icons will be visible when we are shrinking the size 
+          .listItemTitle{
+            @include lg{
+              display: none;
+            }
+          }
+        }
+      }
+    
