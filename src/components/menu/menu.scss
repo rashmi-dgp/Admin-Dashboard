@@ -1,46 +1,54 @@
 @import "../../styles/variables.scss";
 @import "../../styles/responsive.scss";
-.menu{
-    .item{
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-        gap: 5px;
-        margin-bottom: 20px;
-        min-height: 0;
+
+.menu {
+  .item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 20px;
+
+    @include lg {
+      margin-bottom: 12px;
     }
-    .title{
-        font-size: 10px;
-        font-weight: 200;
-        color: $soft-color;
-        text-transform: uppercase;
+  }
 
-        @include lg{
-            display: none;
-          }
-    
+  .title {
+    font-size: 10px;
+    font-weight: 200;
+    color: $soft-color;
+    text-transform: uppercase;
+
+    @include lg {
+      display: none;
+    }
+  }
+
+  .listItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: $soft-bg;
     }
 
-    .listItem{
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px;
-        border-radius: 5px;
-        &:hover{
-            background-color: $soft-bg;
+    img {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
 
-        }
-        height: auto;
-        &:hover {
-            background-color: $soft-bg;
-          }
-    // only icons will be visible when we are shrinking the size 
-          .listItemTitle{
-            @include lg{
-              display: none;
-            }
-          }
-        }
+    .listItemTitle {
+      font-size: 14px;
+      white-space: nowrap;
+
+      @include lg {
+        display: none;
       }
-    
+    }
+  }
+}

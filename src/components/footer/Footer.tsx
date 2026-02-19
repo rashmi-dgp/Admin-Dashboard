@@ -1,12 +1,12 @@
-import "./footer.scss"
+import "./footer.scss";
 
- const Footer = () => {
+const Footer = () => {
   return (
     <div className="footer">
-      <span>rashmi_admin</span>
-      <span>admin dashboard</span>
+      <span>Productivity Tracker</span>
+      <span>Daily Life Management</span>
     </div>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -1,29 +1,29 @@
-.footer{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    min-height: 0;
-    min-width: 0;
-    span{
-        // sice we had two spans and each spn required a diff font style
-        // we used the concept of first anfd last childs 
-        // feature of sass
-        &:first-child{
-            font-weight: bold;
-        }
-        &:last-child{
-            font-size: 14px;
-        }
+@import "../../styles/variables.scss";
+@import "../../styles/responsive.scss";
 
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-top: 2px solid $soft-bg;
+  gap: 8px;
 
+  @include sm {
+    padding: 10px 12px;
+    justify-content: center;
+    text-align: center;
+  }
 
-
-
-
+  span {
+    &:first-child {
+      font-weight: bold;
     }
 
-
-
+    &:last-child {
+      font-size: 13px;
+      color: $soft-color;
+    }
+  }
 }

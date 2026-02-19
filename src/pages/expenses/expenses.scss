@@ -1,0 +1,396 @@
+@import "../../styles/variables.scss";
+@import "../../styles/responsive.scss";
+
+.expensesPage {
+  padding: 10px 0;
+
+  .pageTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 600;
+
+    @include sm {
+      font-size: 20px;
+    }
+  }
+
+  .addForm {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+
+    input,
+    select {
+      padding: 10px 14px;
+      border: 2px solid $soft-bg;
+      border-radius: 8px;
+      background: $dark-bg;
+      color: white;
+      font-size: 14px;
+      outline: none;
+
+      &:focus {
+        border-color: #8884d8;
+      }
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 0;
+    }
+
+    input[type="number"] {
+      width: 120px;
+    }
+
+    @include sm {
+      flex-direction: column;
+
+      input[type="text"],
+      input[type="number"],
+      select {
+        width: 100%;
+      }
+    }
+  }
+
+  .btnPrimary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #8884d8;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      background: #6c63ff;
+    }
+
+    @include sm {
+      width: 100%;
+    }
+  }
+
+  .chartsRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+
+    @include md {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .chartCard {
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+    overflow: hidden;
+
+    h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+  }
+
+  // Section header for "This Month"
+  .sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+
+  .sectionTotal {
+    font-size: 18px;
+    font-weight: 700;
+    color: #8884d8;
+  }
+
+  .filterRow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+
+    select {
+      padding: 8px 12px;
+      border: 2px solid $soft-bg;
+      border-radius: 8px;
+      background: $dark-bg;
+      color: white;
+      font-size: 13px;
+      outline: none;
+    }
+
+    @include sm {
+      gap: 8px;
+    }
+  }
+
+  .totalLabel {
+    font-size: 14px;
+
+    strong {
+      color: #8884d8;
+    }
+  }
+
+  .totalAll {
+    color: $soft-color;
+    font-size: 12px;
+  }
+
+  .expenseList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .empty {
+    text-align: center;
+    color: $soft-color;
+    padding: 40px 0;
+  }
+
+  .expenseItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+
+    @include sm {
+      flex-wrap: wrap;
+      padding: 12px;
+      gap: 8px;
+    }
+  }
+
+  .catDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .expContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .expTitle {
+    font-weight: 500;
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .expMeta {
+    font-size: 12px;
+    color: $soft-color;
+    text-transform: capitalize;
+  }
+
+  .expAmount {
+    font-weight: 700;
+    font-size: 16px;
+    color: #ff9800;
+    white-space: nowrap;
+  }
+
+  .expActions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+
+    @include sm {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+
+  .btnEdit,
+  .btnDelete,
+  .btnSave,
+  .btnCancel {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .btnEdit {
+    background: $soft-bg;
+    color: white;
+  }
+
+  .btnDelete {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+  }
+
+  .btnSave {
+    background: #4caf50;
+    color: white;
+  }
+
+  .btnCancel {
+    background: $soft-bg;
+    color: white;
+  }
+
+  .editRow {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    input,
+    select {
+      padding: 8px 10px;
+      border: 2px solid $soft-bg;
+      border-radius: 6px;
+      background: $dark-bg;
+      color: white;
+      font-size: 13px;
+      outline: none;
+
+      &:focus {
+        border-color: #8884d8;
+      }
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 0;
+    }
+
+    input[type="number"] {
+      width: 100px;
+    }
+
+    @include sm {
+      flex-direction: column;
+
+      input,
+      select {
+        width: 100%;
+      }
+    }
+  }
+
+  // Past Months Section
+  .pastMonths {
+    margin-top: 32px;
+  }
+
+  .pastTitle {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .monthGroup {
+    margin-bottom: 8px;
+    border-radius: 10px;
+    border: 2px solid $soft-bg;
+    overflow: hidden;
+  }
+
+  .monthHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(56, 66, 86, 0.5);
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+    gap: 12px;
+
+    &:hover {
+      background: rgba(56, 66, 86, 0.7);
+    }
+
+    @include sm {
+      padding: 14px 14px;
+    }
+  }
+
+  .monthLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .monthName {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .monthItemCount {
+    font-size: 12px;
+    color: $soft-color;
+  }
+
+  .monthRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .monthTotal {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ff9800;
+
+    @include sm {
+      font-size: 16px;
+    }
+  }
+
+  .arrow {
+    font-size: 12px;
+    color: $soft-color;
+    transition: transform 0.25s;
+
+    &.open {
+      transform: rotate(180deg);
+    }
+  }
+
+  .monthBody {
+    padding: 10px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(42, 52, 71, 0.3);
+
+    @include sm {
+      padding: 8px 10px 12px;
+    }
+  }
+}

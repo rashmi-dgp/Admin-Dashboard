@@ -1,0 +1,218 @@
+@import "../../styles/variables.scss";
+@import "../../styles/responsive.scss";
+
+.exercisePage {
+  padding: 10px 0;
+
+  .pageTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 600;
+
+    @include sm {
+      font-size: 20px;
+    }
+  }
+
+  .todayCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-radius: 12px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.5);
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    @include sm {
+      padding: 16px;
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .todayInfo {
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+
+      @include sm {
+        font-size: 18px;
+      }
+    }
+  }
+
+  .todayDate {
+    font-size: 13px;
+    color: $soft-color;
+  }
+
+  .todayBtn {
+    padding: 12px 28px;
+    border: 2px solid $soft-bg;
+    border-radius: 10px;
+    background: transparent;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+
+    &:hover {
+      border-color: #4caf50;
+      background: rgba(76, 175, 80, 0.1);
+    }
+
+    &.done {
+      background: #4caf50;
+      border-color: #4caf50;
+      color: white;
+    }
+
+    @include sm {
+      width: 100%;
+    }
+  }
+
+  .statsRow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+
+    @include sm {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  }
+
+  .statCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+    gap: 6px;
+
+    @include sm {
+      padding: 14px;
+      flex-direction: row;
+      justify-content: center;
+      gap: 12px;
+    }
+  }
+
+  .statNum {
+    font-size: 32px;
+    font-weight: 700;
+
+    &.fire::before {
+      content: "🔥 ";
+    }
+
+    @include sm {
+      font-size: 24px;
+    }
+  }
+
+  .statLabel {
+    font-size: 13px;
+    color: $soft-color;
+  }
+
+  .chartCard {
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+    margin-bottom: 20px;
+    overflow: hidden;
+
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    @include sm {
+      padding: 14px;
+    }
+  }
+
+  .calendarCard {
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    @include sm {
+      padding: 14px;
+    }
+  }
+
+  .calGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+
+    @include sm {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+    }
+  }
+
+  .calDay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    border: 2px solid $soft-bg;
+    border-radius: 8px;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    gap: 2px;
+
+    &:hover {
+      border-color: #4caf50;
+    }
+
+    &.done {
+      background: rgba(76, 175, 80, 0.2);
+      border-color: #4caf50;
+    }
+
+    @include sm {
+      padding: 6px 2px;
+      border-radius: 6px;
+    }
+  }
+
+  .calLabel {
+    font-size: 10px;
+    color: $soft-color;
+
+    @include sm {
+      font-size: 9px;
+    }
+  }
+
+  .calCheck {
+    font-size: 14px;
+    color: #4caf50;
+    font-weight: 700;
+  }
+}

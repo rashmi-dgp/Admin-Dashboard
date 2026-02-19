@@ -1,0 +1,279 @@
+@import "../../styles/variables.scss";
+@import "../../styles/responsive.scss";
+
+.tasksPage {
+  padding: 10px 0;
+
+  .pageTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 600;
+
+    @include sm {
+      font-size: 20px;
+    }
+  }
+
+  .addForm {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 14px;
+      border: 2px solid $soft-bg;
+      border-radius: 8px;
+      background: $dark-bg;
+      color: white;
+      font-size: 14px;
+      outline: none;
+
+      &:focus {
+        border-color: #8884d8;
+      }
+    }
+
+    @include sm {
+      flex-direction: column;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  .btnPrimary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #8884d8;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #6c63ff;
+    }
+
+    @include sm {
+      width: 100%;
+    }
+  }
+
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+
+    select,
+    input[type="date"] {
+      padding: 8px 12px;
+      border: 2px solid $soft-bg;
+      border-radius: 8px;
+      background: $dark-bg;
+      color: white;
+      font-size: 13px;
+      outline: none;
+    }
+
+    @include sm {
+      select,
+      input[type="date"] {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+  }
+
+  .btnClear {
+    padding: 8px 12px;
+    border: 1px solid $soft-bg;
+    border-radius: 8px;
+    background: transparent;
+    color: $soft-color;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .taskList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .empty {
+    text-align: center;
+    color: $soft-color;
+    padding: 40px 0;
+  }
+
+  .taskItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+    transition: border-color 0.2s;
+
+    &.completed {
+      opacity: 0.65;
+
+      .taskTitle {
+        text-decoration: line-through;
+      }
+    }
+
+    &:hover {
+      border-color: #555;
+    }
+
+    @include sm {
+      flex-wrap: wrap;
+      padding: 12px;
+      gap: 8px;
+    }
+  }
+
+  .taskCheck {
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .checkbox {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border: 2px solid $soft-color;
+    border-radius: 6px;
+    transition: all 0.2s;
+
+    &.checked {
+      background: #4caf50;
+      border-color: #4caf50;
+      position: relative;
+
+      &::after {
+        content: "✓";
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 14px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .taskContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+
+    @include sm {
+      flex-basis: calc(100% - 40px);
+    }
+  }
+
+  .taskTitle {
+    font-weight: 500;
+    font-size: 15px;
+    word-break: break-word;
+  }
+
+  .taskDesc {
+    font-size: 13px;
+    color: $soft-color;
+    word-break: break-word;
+  }
+
+  .taskDate {
+    font-size: 11px;
+    color: $soft-color;
+    opacity: 0.7;
+  }
+
+  .taskActions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+
+    @include sm {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+
+  .btnEdit,
+  .btnDelete,
+  .btnSave,
+  .btnCancel {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .btnEdit {
+    background: $soft-bg;
+    color: white;
+  }
+
+  .btnDelete {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+  }
+
+  .btnSave {
+    background: #4caf50;
+    color: white;
+  }
+
+  .btnCancel {
+    background: $soft-bg;
+    color: white;
+  }
+
+  .editRow {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 10px;
+      border: 2px solid $soft-bg;
+      border-radius: 6px;
+      background: $dark-bg;
+      color: white;
+      font-size: 13px;
+      outline: none;
+
+      &:focus {
+        border-color: #8884d8;
+      }
+    }
+
+    @include sm {
+      flex-direction: column;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+}

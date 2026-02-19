@@ -1,0 +1,302 @@
+@import "../../styles/variables.scss";
+@import "../../styles/responsive.scss";
+
+.officePage {
+  padding: 10px 0;
+
+  .pageTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 600;
+
+    @include sm {
+      font-size: 20px;
+    }
+  }
+
+  .addForm {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+
+    input,
+    select {
+      padding: 10px 14px;
+      border: 2px solid $soft-bg;
+      border-radius: 8px;
+      background: $dark-bg;
+      color: white;
+      font-size: 14px;
+      outline: none;
+
+      &:focus {
+        border-color: #8884d8;
+      }
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 0;
+    }
+
+    @include sm {
+      flex-direction: column;
+
+      input,
+      select {
+        width: 100%;
+      }
+    }
+  }
+
+  .btnPrimary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #8884d8;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      background: #6c63ff;
+    }
+
+    @include sm {
+      width: 100%;
+    }
+  }
+
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+
+    select {
+      padding: 8px 12px;
+      border: 2px solid $soft-bg;
+      border-radius: 8px;
+      background: $dark-bg;
+      color: white;
+      font-size: 13px;
+      outline: none;
+    }
+
+    @include sm {
+      select {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+  }
+
+  .countLabel {
+    font-size: 13px;
+    color: $soft-color;
+    margin-left: auto;
+
+    @include sm {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+
+  .taskList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .empty {
+    text-align: center;
+    color: $soft-color;
+    padding: 40px 0;
+  }
+
+  .taskItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+    transition: border-color 0.2s;
+
+    &.done {
+      opacity: 0.6;
+
+      .taskTitle {
+        text-decoration: line-through;
+      }
+    }
+
+    &.overdue {
+      border-color: rgba(244, 67, 54, 0.4);
+    }
+
+    &:hover {
+      border-color: #555;
+    }
+
+    @include sm {
+      flex-wrap: wrap;
+      padding: 12px;
+      gap: 8px;
+    }
+  }
+
+  .priorityDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .taskContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .taskTitleRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .taskTitle {
+    font-weight: 500;
+    font-size: 15px;
+    word-break: break-word;
+  }
+
+  .priorityBadge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border: 1px solid;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .taskDesc {
+    font-size: 13px;
+    color: $soft-color;
+    word-break: break-word;
+  }
+
+  .taskMeta {
+    display: flex;
+    gap: 10px;
+    font-size: 11px;
+    color: $soft-color;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .overdueLabel {
+    color: #f44336;
+    font-weight: 700;
+    font-size: 10px;
+  }
+
+  .taskActions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+    align-items: center;
+    flex-wrap: wrap;
+
+    @include sm {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+
+  .statusSelect {
+    padding: 6px 8px;
+    border: 2px solid $soft-bg;
+    border-radius: 6px;
+    background: $dark-bg;
+    color: white;
+    font-size: 12px;
+    outline: none;
+  }
+
+  .btnEdit,
+  .btnDelete,
+  .btnSave,
+  .btnCancel {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .btnEdit {
+    background: $soft-bg;
+    color: white;
+  }
+
+  .btnDelete {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+  }
+
+  .btnSave {
+    background: #4caf50;
+    color: white;
+  }
+
+  .btnCancel {
+    background: $soft-bg;
+    color: white;
+  }
+
+  .editRow {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    input,
+    select {
+      padding: 8px 10px;
+      border: 2px solid $soft-bg;
+      border-radius: 6px;
+      background: $dark-bg;
+      color: white;
+      font-size: 13px;
+      outline: none;
+
+      &:focus {
+        border-color: #8884d8;
+      }
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 0;
+    }
+
+    @include sm {
+      flex-direction: column;
+
+      input,
+      select {
+        width: 100%;
+      }
+    }
+  }
+}

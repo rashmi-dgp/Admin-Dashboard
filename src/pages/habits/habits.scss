@@ -1,0 +1,305 @@
+@import "../../styles/variables.scss";
+@import "../../styles/responsive.scss";
+
+.habitsPage {
+  padding: 10px 0;
+
+  .pageTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 600;
+
+    @include sm {
+      font-size: 18px;
+    }
+  }
+
+  .addForm {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 14px;
+      border: 2px solid $soft-bg;
+      border-radius: 8px;
+      background: $dark-bg;
+      color: white;
+      font-size: 14px;
+      outline: none;
+
+      &:focus {
+        border-color: #8884d8;
+      }
+    }
+
+    @include sm {
+      flex-direction: column;
+    }
+  }
+
+  .btnPrimary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #8884d8;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+
+    &:hover {
+      background: #6c63ff;
+    }
+
+    @include sm {
+      width: 100%;
+    }
+  }
+
+  // Section Headers
+  .sectionHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    margin-top: 8px;
+
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+
+      @include sm {
+        font-size: 16px;
+      }
+    }
+
+    &.completedSection {
+      margin-top: 32px;
+      justify-content: space-between;
+    }
+  }
+
+  .sectionLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sectionCount {
+    background: $soft-bg;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .completedCount {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+  }
+
+  .btnToggle {
+    padding: 6px 14px;
+    border: 1px solid $soft-bg;
+    border-radius: 6px;
+    background: transparent;
+    color: $soft-color;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: #8884d8;
+      color: white;
+    }
+  }
+
+  .empty {
+    text-align: center;
+    color: $soft-color;
+    padding: 40px 0;
+  }
+
+  .habitList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .habitCard {
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+
+    &.completedCard {
+      border-color: rgba(76, 175, 80, 0.3);
+      background: rgba(76, 175, 80, 0.05);
+    }
+
+    @include sm {
+      padding: 14px;
+    }
+  }
+
+  .habitHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .habitInfo {
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+
+      @include sm {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .completedBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .habitMeta {
+    font-size: 12px;
+    color: $soft-color;
+  }
+
+  .habitActions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .btnReset {
+    padding: 6px 12px;
+    border: 1px solid #ff9800;
+    border-radius: 6px;
+    background: rgba(255, 152, 0, 0.15);
+    color: #ff9800;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .btnDelete {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .progressBar {
+    position: relative;
+    height: 22px;
+    border-radius: 11px;
+    background: $soft-bg;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #8884d8, #6c63ff);
+    border-radius: 11px;
+    transition: width 0.4s;
+
+    &.completedFill {
+      background: linear-gradient(90deg, #4caf50, #2e7d32);
+    }
+  }
+
+  .progressLabel {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .dayGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+
+    @include sm {
+      gap: 4px;
+    }
+  }
+
+  .dayCell {
+    aspect-ratio: 1;
+    border: 2px solid $soft-bg;
+    border-radius: 8px;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+
+    &.done {
+      background: #4caf50;
+      border-color: #4caf50;
+    }
+
+    &.future {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    &.active:hover:not(.done) {
+      border-color: #8884d8;
+      background: rgba(136, 132, 216, 0.15);
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+
+    @include sm {
+      border-radius: 6px;
+    }
+  }
+
+  .dayNum {
+    font-size: 12px;
+    font-weight: 600;
+
+    @include sm {
+      font-size: 10px;
+    }
+  }
+}

@@ -1,66 +1,186 @@
 @import "../../styles/variables.scss";
 @import "../../styles/responsive.scss";
 
-.home{
-    display: grid;
-
-    gap: 20px;
-    // grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-columns: repeat(4,1fr);
-    grid-auto-rows: minmax(100px, auto);
-    grid-auto-flow: dense;//this will remove the spaces between the grid boxes when we are making it responsive
-    
-    min-width: 0;
-    min-height: 0;
-
-    @include xl{
-        grid-template-columns: repeat(3, 1fr);
-      }
-      @include lg{
-        grid-template-columns: repeat(2, 1fr);
-      }
-      @include md {
-        grid-template-columns: repeat(1, 1fr);
-      }
-      @include sm {
-        grid-auto-rows: minmax(120px, auto);
-      }
-    
-    
-/*
 .home {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: minmax(180px, auto);
-  grid-auto-flow: dense;
+  padding: 10px 0;
 
-*/
+  .pageTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 600;
 
-    .box{
-        padding: 15px;
-        border-radius: 10px;
-        border: 3px solid $soft-bg;
-        background-color: rgba(84, 104, 111, 0.521);
+    @include sm {
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+  }
+
+  .dashGrid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+
+    @include xl {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @include md {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+
+  .card {
+    display: block;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.5);
+    transition: transform 0.2s, border-color 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-3px);
+      border-color: #8884d8;
     }
 
-    .box1{
-        grid-column: span 1;
-        grid-row: span 3;
+    @include sm {
+      padding: 16px;
+    }
+  }
+
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 8px;
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+
+      @include sm {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .badge {
+    background: $soft-bg;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .streakBadge {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+  }
+
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .emptyHint {
+    color: $soft-color;
+    font-size: 14px;
+    padding: 30px 0;
+  }
+
+  .cardHint {
+    color: $soft-color;
+    font-size: 13px;
+  }
+
+  .statRow {
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .statGreen {
+    color: #4caf50;
+  }
+
+  .statOrange {
+    color: #ff9800;
+  }
+
+  .progressRing {
+    width: 100px;
+    height: 100px;
+
+    svg {
+      width: 100%;
+      height: 100%;
     }
 
-    .box4{
-        grid-column: span 1;
-        grid-row: span 3;
+    .ringBg {
+      fill: none;
+      stroke: $soft-bg;
+      stroke-width: 3;
     }
 
-    .box7{
-        grid-column: span 2;
-        grid-row: span 2;
-        @include md {
-            display: none;
-          }
+    .ringFill {
+      fill: none;
+      stroke: #8884d8;
+      stroke-width: 3;
+      stroke-linecap: round;
+      transition: stroke-dasharray 0.4s;
     }
 
+    .ringText {
+      fill: white;
+      font-size: 8px;
+      text-anchor: middle;
+      font-weight: 600;
+    }
+  }
 
+  .officeStats {
+    display: flex;
+    gap: 24px;
+    padding: 16px 0;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    @include sm {
+      gap: 16px;
+    }
+  }
+
+  .officeStat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .officeNum {
+    font-size: 28px;
+    font-weight: 700;
+
+    @include sm {
+      font-size: 22px;
+    }
+  }
+
+  .officeHigh {
+    color: #f44336;
+  }
+
+  .officeLabel {
+    font-size: 12px;
+    color: $soft-color;
+  }
 }

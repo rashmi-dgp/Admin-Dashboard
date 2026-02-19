@@ -1,40 +1,57 @@
 @import "./variables.scss";
 @import "./responsive.scss";
-// * {
-//   margin: 0;
-//   padding: 0;
-//   box-sizing: border-box;
-// }
+
 * {
-  // outline: 1px solid red;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-
 a {
   text-decoration: none;
   color: inherit;
 }
-.main{
+
+.main {
   font-family: "Inter", sans-serif;
   background-color: $main-bg;
   color: $main-color;
-}
-.container{
+  min-height: 100vh;
   display: flex;
-  // flex-wrap: wrap;
+  flex-direction: column;
 }
-.menuContainer{
+
+.container {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.menuContainer {
   width: 250px;
+  flex-shrink: 0;
   padding: 5px 20px;
   border-right: 2px solid $soft-bg;
-  @include lg{
-    width: max-content;
+  overflow-y: auto;
+
+  @include lg {
+    width: 60px;
+    padding: 5px 8px;
+  }
+
+  @include sm {
+    display: none;
   }
 }
-.contentContainer{
-  padding: 5px 20px;
-  width: 100%;
+
+.contentContainer {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 20px;
+  overflow-y: auto;
+
+  @include sm {
+    padding: 10px 12px;
+  }
 }

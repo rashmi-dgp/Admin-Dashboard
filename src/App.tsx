@@ -1,21 +1,14 @@
 import Home from "./pages/home/Home";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import Users from "./pages/users/Users";
-import Products from "./pages/products/Products";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
 import Menu from "./components/menu/Menu";
-import Login from "./pages/login/Login";
+import Tasks from "./pages/tasks/Tasks";
+import Habits from "./pages/habits/Habits";
+import Expenses from "./pages/expenses/Expenses";
+import Exercise from "./pages/exercise/Exercise";
+import Office from "./pages/office/Office";
 import "./styles/global.scss";
-import User from "./pages/user/User";
-import Product from "./pages/product/Product";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-
-
-const queryClient = new QueryClient();
 
 function App() {
   const Layout = () => {
@@ -27,9 +20,7 @@ function App() {
             <Menu />
           </div>
           <div className="contentContainer">
-            <QueryClientProvider client={queryClient}>
-              <Outlet />
-            </QueryClientProvider>
+            <Outlet />
           </div>
         </div>
         <Footer />
@@ -42,31 +33,13 @@ function App() {
       path: "/",
       element: <Layout />,
       children: [
-        {
-          path: "/",
-          element: <Home />,
-        },
-        {
-          path: "/users",
-          element: <Users />,
-        },
-        {
-          path: "/products",
-          element: <Products />,
-        },
-        {
-          path: "/users/:id",
-          element: <User />,
-        },
-        {
-          path: "/products/:id",
-          element: <Product />,
-        },
+        { path: "/", element: <Home /> },
+        { path: "/tasks", element: <Tasks /> },
+        { path: "/habits", element: <Habits /> },
+        { path: "/expenses", element: <Expenses /> },
+        { path: "/exercise", element: <Exercise /> },
+        { path: "/office", element: <Office /> },
       ],
-    },
-    {
-      path: "/login",
-      element: <Login />,
     },
   ]);
 

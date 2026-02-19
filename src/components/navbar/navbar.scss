@@ -1,57 +1,62 @@
+@import "../../styles/variables.scss";
 @import "../../styles/responsive.scss";
-.navbar{
-    width: 100%;
-    padding: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    min-height: 0;
-    min-width: 0;
-    .logo{
+
+.navbar {
+  width: 100%;
+  padding: 12px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid $soft-bg;
+  gap: 8px;
+
+  @include sm {
+    padding: 10px 12px;
+  }
+
+  .logo {
     display: flex;
     align-items: center;
     font-weight: bold;
     gap: 10px;
+
+    img {
+      width: 24px;
+      height: 24px;
     }
 
-    .icons{
-     display: flex;
-     align-items: center;
-     gap: 20px;
-     .icon{
-        @include sm{
+    span {
+      font-size: 16px;
+
+      @include sm {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .icons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .user {
+      align-items: center;
+      display: flex;
+      gap: 8px;
+
+      img {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      span {
+        @include sm {
           display: none;
         }
-    }  
-     .notification{
-        position: relative;
-        span{
-            background-color: red;
-            color: white;
-            width: 16px;
-            height:16px;
-            border-radius: 50%;
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-     }
-
-    .user{
-        align-items: center;
-        display: flex;
-        gap: 10px;
-        img{width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        object-fit: cover;}
+      }
     }
-
-
-
-}
+  }
 }
