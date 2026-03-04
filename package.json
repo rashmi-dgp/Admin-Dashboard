@@ -10,7 +10,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "reminder:morning": "node scripts/send-reminder.mjs morning",
+    "reminder:evening": "node scripts/send-reminder.mjs evening"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -19,10 +21,12 @@
     "@mui/x-data-grid": "^6.10.2",
     "@supabase/supabase-js": "^2.98.0",
     "@tanstack/react-query": "4.29.19",
+    "dotenv": "^17.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.2",
     "recharts": "^2.7.2",
+    "resend": "^6.9.3",
     "sass": "^1.64.1"
   },
   "devDependencies": {
