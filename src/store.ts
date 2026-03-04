@@ -110,6 +110,18 @@ export async function deleteTask(id: string): Promise<void> {
   if (error) throw error;
 }
 
+/** Pure function — consecutive days (ending today) with at least one task logged. */
+export function computeTaskStreak(tasks: DailyTask[]): number {
+  const dateSet = new Set(tasks.map((t) => t.date));
+  let streak = 0;
+  const d = new Date();
+  while (dateSet.has(d.toISOString().split("T")[0])) {
+    streak++;
+    d.setDate(d.getDate() - 1);
+  }
+  return streak;
+}
+
 // --------------- Habits ---------------
 
 export async function getHabits(): Promise<Habit[]> {

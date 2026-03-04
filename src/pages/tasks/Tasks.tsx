@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { DailyTask } from "../../types";
-import { getTasks, addTask, updateTask, deleteTask, today } from "../../store";
+import { getTasks, addTask, updateTask, deleteTask, today, computeTaskStreak } from "../../store";
 import "./tasks.scss";
 
 function Tasks() {
@@ -68,6 +68,11 @@ function Tasks() {
     setEditingId(null);
   };
 
+  const streak = useMemo(() => computeTaskStreak(tasks), [tasks]);
+  const todayTasks = useMemo(() => tasks.filter((t) => t.date === today()), [tasks]);
+  const todayCompleted = todayTasks.filter((t) => t.status === "completed").length;
+  const totalCompleted = tasks.filter((t) => t.status === "completed").length;
+
   const filtered = tasks.filter((t) => {
     if (filterStatus !== "all" && t.status !== filterStatus) return false;
     if (filterDate && t.date !== filterDate) return false;
@@ -77,6 +82,22 @@ function Tasks() {
   return (
     <div className="tasksPage">
       <h1 className="pageTitle">Daily Tasks</h1>
+
+      {/* Stats Row */}
+      <div className="statsRow">
+        <div className="statCard">
+          <span className="statNum fire">{streak}</span>
+          <span className="statLabel">Day Streak</span>
+        </div>
+        <div className="statCard">
+          <span className="statNum">{todayCompleted}/{todayTasks.length}</span>
+          <span className="statLabel">Done Today</span>
+        </div>
+        <div className="statCard">
+          <span className="statNum">{totalCompleted}</span>
+          <span className="statLabel">All-time Completed</span>
+        </div>
+      </div>
 
       {/* Add Task Form */}
       <div className="addForm">

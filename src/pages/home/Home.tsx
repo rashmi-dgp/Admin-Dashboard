@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from "recharts";
-import { getTasks, getHabits, getExpenses, getExerciseLogs, getOfficeTasks, computeStreak } from "../../store";
+import { getTasks, getHabits, getExpenses, getExerciseLogs, getOfficeTasks, computeStreak, computeTaskStreak } from "../../store";
 import { CATEGORY_COLORS } from "../../data";
 import "./home.scss";
 
@@ -14,6 +14,7 @@ function Home() {
   const { data: officeTasks = [] } = useQuery({ queryKey: ["officeTasks"], queryFn: getOfficeTasks });
 
   const streak = useMemo(() => computeStreak(exerciseLogs), [exerciseLogs]);
+  const taskStreak = useMemo(() => computeTaskStreak(tasks), [tasks]);
 
   const completedTasks = tasks.filter((t) => t.status === "completed").length;
   const pendingTasks = tasks.filter((t) => t.status === "pending").length;
@@ -64,7 +65,7 @@ function Home() {
         <Link to="/tasks" className="card taskCard">
           <div className="cardHeader">
             <h3>Daily Tasks</h3>
-            <span className="badge">{tasks.length}</span>
+            <span className="badge streakBadge">🔥 {taskStreak} day streak</span>
           </div>
           <div className="cardBody">
             {tasks.length > 0 ? (

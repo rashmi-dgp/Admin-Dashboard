@@ -14,6 +14,54 @@
     }
   }
 
+  .statsRow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+
+    @include sm {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  }
+
+  .statCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+    gap: 6px;
+
+    @include sm {
+      padding: 14px;
+      flex-direction: row;
+      justify-content: center;
+      gap: 12px;
+    }
+  }
+
+  .statNum {
+    font-size: 32px;
+    font-weight: 700;
+
+    &.fire::before {
+      content: "🔥 ";
+    }
+
+    @include sm {
+      font-size: 24px;
+    }
+  }
+
+  .statLabel {
+    font-size: 13px;
+    color: $soft-color;
+  }
+
   .addForm {
     display: flex;
     gap: 10px;
