@@ -99,12 +99,23 @@
     }
   }
 
-  // Section header for "This Month"
-  .sectionHeader {
+  .budgetCard {
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid $soft-bg;
+    background: rgba(56, 66, 86, 0.4);
+    margin-bottom: 20px;
+
+    @include sm {
+      padding: 14px;
+    }
+  }
+
+  .budgetHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 
     h2 {
       font-size: 18px;
@@ -112,10 +123,73 @@
     }
   }
 
-  .sectionTotal {
+  .budgetNumbers {
     font-size: 18px;
     font-weight: 700;
     color: #8884d8;
+
+    @include sm {
+      font-size: 16px;
+    }
+  }
+
+  .budgetOf {
+    font-weight: 400;
+    color: $soft-color;
+    font-size: 14px;
+  }
+
+  .budgetBarBg {
+    height: 10px;
+    background: $soft-bg;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .budgetBarFill {
+    height: 100%;
+    border-radius: 5px;
+    background: #4caf50;
+    transition: width 0.4s ease;
+
+    &.warn {
+      background: #ff9800;
+    }
+
+    &.over {
+      background: #f44336;
+    }
+  }
+
+  .budgetFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 13px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .budgetPercent {
+    color: $soft-color;
+  }
+
+  .budgetRemaining {
+    color: #4caf50;
+    font-weight: 500;
+  }
+
+  .budgetAlert {
+    font-weight: 600;
+
+    &.warn {
+      color: #ff9800;
+    }
+
+    &.over {
+      color: #f44336;
+    }
   }
 
   .filterRow {

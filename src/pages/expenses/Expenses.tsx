@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { Expense } from "../../types";
 import { getExpenses, addExpense, updateExpense, deleteExpense, today } from "../../store";
-import { EXPENSE_CATEGORIES, CATEGORY_COLORS } from "../../data";
+import { EXPENSE_CATEGORIES, CATEGORY_COLORS, MONTHLY_BUDGET } from "../../data";
 import "./expenses.scss";
 
 function formatRs(n: number): string {
@@ -206,10 +206,30 @@ function Expenses() {
         </div>
       )}
 
-      {/* Current Month */}
-      <div className="sectionHeader">
-        <h2>This Month</h2>
-        <span className="sectionTotal">{formatRs(totalCurrent)}</span>
+      {/* Budget Progress */}
+      <div className="budgetCard">
+        <div className="budgetHeader">
+          <h2>This Month</h2>
+          <span className="budgetNumbers">
+            {formatRs(totalCurrent)} <span className="budgetOf">/ {formatRs(MONTHLY_BUDGET)}</span>
+          </span>
+        </div>
+        <div className="budgetBarBg">
+          <div
+            className={`budgetBarFill ${totalCurrent > MONTHLY_BUDGET ? "over" : totalCurrent >= MONTHLY_BUDGET * 0.8 ? "warn" : ""}`}
+            style={{ width: `${Math.min((totalCurrent / MONTHLY_BUDGET) * 100, 100)}%` }}
+          />
+        </div>
+        <div className="budgetFooter">
+          <span className="budgetPercent">{Math.round((totalCurrent / MONTHLY_BUDGET) * 100)}% used</span>
+          {totalCurrent > MONTHLY_BUDGET ? (
+            <span className="budgetAlert over">⚠ Over budget by {formatRs(totalCurrent - MONTHLY_BUDGET)}</span>
+          ) : totalCurrent >= MONTHLY_BUDGET * 0.8 ? (
+            <span className="budgetAlert warn">⚠ {formatRs(MONTHLY_BUDGET - totalCurrent)} remaining — approaching limit</span>
+          ) : (
+            <span className="budgetRemaining">{formatRs(MONTHLY_BUDGET - totalCurrent)} remaining</span>
+          )}
+        </div>
       </div>
 
       <div className="filterRow">

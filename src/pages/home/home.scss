@@ -82,6 +82,16 @@
     color: #ff9800;
   }
 
+  .badgeWarn {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+  }
+
+  .badgeOver {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+  }
+
   .cardBody {
     display: flex;
     flex-direction: column;

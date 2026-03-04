@@ -49,24 +49,30 @@ function todayIST() {
   return ist.toISOString().split("T")[0];
 }
 
+const MONTHLY_BUDGET = 30_000;
+
 async function fetchTodaySummary() {
   const date = todayIST();
+  const monthPrefix = date.slice(0, 7);
 
-  const [tasks, expenses, exercise, officeTasks] = await Promise.all([
+  const [tasks, expenses, monthExpenses, exercise, officeTasks] = await Promise.all([
     supabase.from("daily_tasks").select("*").eq("date", date),
     supabase.from("expenses").select("*").eq("date", date),
+    supabase.from("expenses").select("amount").gte("date", `${monthPrefix}-01`).lte("date", `${monthPrefix}-31`),
     supabase.from("exercise_logs").select("*").eq("date", date).maybeSingle(),
     supabase.from("office_tasks").select("*"),
   ]);
 
   const taskRows = tasks.data ?? [];
   const expenseRows = expenses.data ?? [];
+  const monthExpenseRows = monthExpenses.data ?? [];
   const exerciseRow = exercise.data;
   const officeRows = officeTasks.data ?? [];
 
   const completedTasks = taskRows.filter((t) => t.status === "completed").length;
   const pendingTasks = taskRows.filter((t) => t.status === "pending").length;
   const totalExpenses = expenseRows.reduce((sum, e) => sum + Number(e.amount), 0);
+  const monthlySpent = monthExpenseRows.reduce((sum, e) => sum + Number(e.amount), 0);
   const exerciseDone = exerciseRow?.done === true;
   const overdueOffice = officeRows.filter(
     (t) => t.status !== "completed" && t.deadline < date
@@ -75,7 +81,7 @@ async function fetchTodaySummary() {
   return {
     date,
     tasks: { total: taskRows.length, completed: completedTasks, pending: pendingTasks },
-    expenses: { count: expenseRows.length, total: totalExpenses },
+    expenses: { count: expenseRows.length, total: totalExpenses, monthlySpent, budget: MONTHLY_BUDGET },
     exercise: { logged: !!exerciseRow, done: exerciseDone },
     office: { total: officeRows.length, overdue: overdueOffice },
   };
@@ -203,6 +209,16 @@ function buildMorningEmail(date) {
 function buildEveningEmail(summary) {
   const { date, tasks, expenses, exercise, office } = summary;
 
+  const budgetPct = Math.round((expenses.monthlySpent / expenses.budget) * 100);
+  const budgetColor = budgetPct >= 100 ? "#ef4444" : budgetPct >= 80 ? "#ff9800" : "#4caf50";
+  const budgetBarWidth = Math.min(budgetPct, 100);
+
+  const budgetLabel = budgetPct >= 100
+    ? `⚠ Over budget by ₹${(expenses.monthlySpent - expenses.budget).toLocaleString("en-IN")}`
+    : budgetPct >= 80
+      ? `⚠ ₹${(expenses.budget - expenses.monthlySpent).toLocaleString("en-IN")} remaining — approaching limit`
+      : `₹${(expenses.budget - expenses.monthlySpent).toLocaleString("en-IN")} remaining`;
+
   const statusBadge = (ok) =>
     ok
       ? '<span style="color:#4caf50;font-weight:bold">✓</span>'
@@ -255,7 +271,19 @@ function buildEveningEmail(summary) {
         </tr>
       </table>
 
-      <div style="margin-top:24px;padding:16px;background:#334155;border-radius:8px;text-align:center">
+      <!-- Budget Alert -->
+      <div style="margin-top:20px;padding:16px;background:#334155;border-radius:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:13px;color:#94a3b8">Monthly Budget</span>
+          <span style="font-size:13px;font-weight:600;color:${budgetColor}">₹${expenses.monthlySpent.toLocaleString("en-IN")} / ₹${expenses.budget.toLocaleString("en-IN")}</span>
+        </div>
+        <div style="background:#1e293b;border-radius:4px;height:8px">
+          <div style="background:${budgetColor};height:8px;border-radius:4px;width:${budgetBarWidth}%"></div>
+        </div>
+        <p style="margin:6px 0 0;font-size:12px;color:${budgetColor};font-weight:500">${budgetLabel}</p>
+      </div>
+
+      <div style="margin-top:16px;padding:16px;background:#334155;border-radius:8px;text-align:center">
         <p style="margin:0 0 4px;font-size:13px;color:#94a3b8">Anything missing? Open the dashboard and log it now.</p>
         <p style="margin:0;font-size:12px;color:#64748b">This report is sent daily at 10 PM IST.</p>
       </div>
@@ -268,6 +296,7 @@ function buildEveningEmail(summary) {
     "",
     `Tasks: ${tasks.completed} completed, ${tasks.pending} pending (${tasks.total} total)`,
     `Expenses: ${expenses.count} entries — ₹${expenses.total}`,
+    `Budget: ₹${expenses.monthlySpent} / ₹${expenses.budget} (${budgetPct}%) — ${budgetLabel}`,
     `Exercise: ${exercise.done ? "Done" : exercise.logged ? "Logged, not done" : "Not logged"}`,
     `Office: ${office.total} tasks, ${office.overdue} overdue`,
     "",

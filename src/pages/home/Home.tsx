@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from "recharts";
 import { getTasks, getHabits, getExpenses, getExerciseLogs, getOfficeTasks, computeStreak, computeTaskStreak } from "../../store";
-import { CATEGORY_COLORS } from "../../data";
+import { CATEGORY_COLORS, MONTHLY_BUDGET } from "../../data";
 import "./home.scss";
 
 function Home() {
@@ -23,7 +23,12 @@ function Home() {
     ? Math.round(habits.reduce((sum, h) => sum + h.progress.filter(Boolean).length, 0) / (habits.length * 21) * 100)
     : 0;
 
-  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const currentMonth = new Date().toISOString().slice(0, 7);
+  const monthlySpent = useMemo(
+    () => expenses.filter((e) => e.date.slice(0, 7) === currentMonth).reduce((s, e) => s + e.amount, 0),
+    [expenses, currentMonth]
+  );
+  const budgetPct = Math.round((monthlySpent / MONTHLY_BUDGET) * 100);
   const categoryData = useMemo(() => {
     const map: Record<string, number> = {};
     expenses.forEach((e) => {
@@ -118,7 +123,9 @@ function Home() {
         <Link to="/expenses" className="card expenseCard">
           <div className="cardHeader">
             <h3>Expenses</h3>
-            <span className="badge">₹{totalExpenses.toLocaleString("en-IN")}</span>
+            <span className={`badge ${budgetPct >= 100 ? "badgeOver" : budgetPct >= 80 ? "badgeWarn" : ""}`}>
+              {budgetPct}% of budget
+            </span>
           </div>
           <div className="cardBody">
             {categoryData.length > 0 ? (

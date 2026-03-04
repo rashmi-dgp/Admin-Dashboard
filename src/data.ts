@@ -49,6 +49,8 @@ export const menu = [
   },
 ];
 
+export const MONTHLY_BUDGET = 30_000;
+
 export const EXPENSE_CATEGORIES = [
   "food",
   "transport",
