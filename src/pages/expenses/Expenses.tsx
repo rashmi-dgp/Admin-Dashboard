@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { Expense } from "../../types";
 import { getExpenses, addExpense, updateExpense, deleteExpense, today } from "../../store";
@@ -16,7 +17,11 @@ function getMonthLabel(ym: string): string {
 }
 
 function Expenses() {
-  const [expenses, setExpenses] = useState<Expense[]>(getExpenses);
+  const { data: expenses = [], refetch } = useQuery({
+    queryKey: ["expenses"],
+    queryFn: getExpenses,
+  });
+
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState<Expense["category"]>("food");
@@ -27,21 +32,38 @@ function Expenses() {
   const [editCategory, setEditCategory] = useState<Expense["category"]>("food");
   const [expandedMonths, setExpandedMonths] = useState<Set<string>>(new Set());
 
-  const refresh = useCallback(() => setExpenses(getExpenses()), []);
+  const addMutation = useMutation({
+    mutationFn: (exp: Omit<Expense, "id" | "createdAt">) => addExpense(exp),
+    onSuccess: () => refetch(),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, updates }: { id: string; updates: Partial<Expense> }) =>
+      updateExpense(id, updates),
+    onSuccess: () => refetch(),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteExpense(id),
+    onSuccess: () => refetch(),
+  });
 
   const currentMonth = today().slice(0, 7);
 
   const handleAdd = () => {
     if (!title.trim() || !amount) return;
-    addExpense({ title: title.trim(), amount: parseFloat(amount), category, date: today() });
+    addMutation.mutate({
+      title: title.trim(),
+      amount: parseFloat(amount),
+      category,
+      date: today(),
+    });
     setTitle("");
     setAmount("");
-    refresh();
   };
 
   const handleDelete = (id: string) => {
-    deleteExpense(id);
-    refresh();
+    deleteMutation.mutate(id);
   };
 
   const startEdit = (e: Expense) => {
@@ -52,9 +74,11 @@ function Expenses() {
   };
 
   const handleEditSave = (id: string) => {
-    updateExpense(id, { title: editTitle, amount: parseFloat(editAmount), category: editCategory });
+    updateMutation.mutate({
+      id,
+      updates: { title: editTitle, amount: parseFloat(editAmount), category: editCategory },
+    });
     setEditingId(null);
-    refresh();
   };
 
   const toggleMonth = (ym: string) => {

@@ -1,24 +1,25 @@
-import { useState, useCallback, useMemo } from "react";
+import { useMemo } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { getExerciseLogs, toggleExercise, getExerciseStreak, today } from "../../store";
-import { ExerciseLog } from "../../types";
+import { getExerciseLogs, toggleExercise, computeStreak, today } from "../../store";
 import "./exercise.scss";
 
 function Exercise() {
-  const [logs, setLogs] = useState<ExerciseLog[]>(getExerciseLogs);
+  const { data: logs = [], refetch } = useQuery({
+    queryKey: ["exerciseLogs"],
+    queryFn: getExerciseLogs,
+  });
 
-  const refresh = useCallback(() => setLogs(getExerciseLogs()), []);
+  const toggleMutation = useMutation({
+    mutationFn: (date: string) => toggleExercise(date),
+    onSuccess: () => refetch(),
+  });
 
-  const streak = useMemo(() => getExerciseStreak(), [logs]);
+  const streak = useMemo(() => computeStreak(logs), [logs]);
 
   const todayStr = today();
   const todayLog = logs.find((l) => l.date === todayStr);
   const todayDone = todayLog?.done ?? false;
-
-  const handleToggleToday = () => {
-    toggleExercise(todayStr);
-    refresh();
-  };
 
   const last30 = useMemo(() => {
     const days: { date: string; label: string; done: boolean }[] = [];
@@ -47,22 +48,12 @@ function Exercise() {
         const log = logs.find((l) => l.date === dateStr);
         if (log?.done) count++;
       }
-      const start = new Date();
-      start.setDate(start.getDate() - w * 7 - 6);
-      weeks.push({
-        name: `Week ${4 - w}`,
-        count,
-      });
+      weeks.push({ name: `Week ${4 - w}`, count });
     }
     return weeks;
   }, [logs]);
 
   const totalDone = logs.filter((l) => l.done).length;
-
-  const handleToggleDay = (date: string) => {
-    toggleExercise(date);
-    refresh();
-  };
 
   return (
     <div className="exercisePage">
@@ -74,7 +65,7 @@ function Exercise() {
           <h2>Today</h2>
           <span className="todayDate">{new Date().toLocaleDateString("en", { weekday: "long", month: "long", day: "numeric" })}</span>
         </div>
-        <button className={`todayBtn ${todayDone ? "done" : ""}`} onClick={handleToggleToday}>
+        <button className={`todayBtn ${todayDone ? "done" : ""}`} onClick={() => toggleMutation.mutate(todayStr)}>
           {todayDone ? "✓ Exercise Done!" : "Mark as Done"}
         </button>
       </div>
@@ -116,7 +107,7 @@ function Exercise() {
             <button
               key={day.date}
               className={`calDay ${day.done ? "done" : ""}`}
-              onClick={() => handleToggleDay(day.date)}
+              onClick={() => toggleMutation.mutate(day.date)}
               title={day.date}
             >
               <span className="calLabel">{day.label}</span>

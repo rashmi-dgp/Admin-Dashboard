@@ -1,4 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { OfficeTask } from "../../types";
 import { getOfficeTasks, addOfficeTask, updateOfficeTask, deleteOfficeTask, today } from "../../store";
 import "./office.scss";
@@ -7,7 +8,11 @@ const PRIORITIES: OfficeTask["priority"][] = ["low", "medium", "high"];
 const STATUSES: OfficeTask["status"][] = ["pending", "in-progress", "completed"];
 
 function Office() {
-  const [tasks, setTasks] = useState<OfficeTask[]>(getOfficeTasks);
+  const { data: tasks = [], refetch } = useQuery({
+    queryKey: ["officeTasks"],
+    queryFn: getOfficeTasks,
+  });
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<OfficeTask["priority"]>("medium");
@@ -20,11 +25,25 @@ function Office() {
   const [editPriority, setEditPriority] = useState<OfficeTask["priority"]>("medium");
   const [editDeadline, setEditDeadline] = useState("");
 
-  const refresh = useCallback(() => setTasks(getOfficeTasks()), []);
+  const addMutation = useMutation({
+    mutationFn: (task: Omit<OfficeTask, "id" | "createdAt">) => addOfficeTask(task),
+    onSuccess: () => refetch(),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, updates }: { id: string; updates: Partial<OfficeTask> }) =>
+      updateOfficeTask(id, updates),
+    onSuccess: () => refetch(),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteOfficeTask(id),
+    onSuccess: () => refetch(),
+  });
 
   const handleAdd = () => {
     if (!title.trim()) return;
-    addOfficeTask({
+    addMutation.mutate({
       title: title.trim(),
       description: description.trim(),
       priority,
@@ -34,17 +53,14 @@ function Office() {
     setTitle("");
     setDescription("");
     setDeadline("");
-    refresh();
   };
 
   const handleStatusChange = (id: string, status: OfficeTask["status"]) => {
-    updateOfficeTask(id, { status });
-    refresh();
+    updateMutation.mutate({ id, updates: { status } });
   };
 
   const handleDelete = (id: string) => {
-    deleteOfficeTask(id);
-    refresh();
+    deleteMutation.mutate(id);
   };
 
   const startEdit = (task: OfficeTask) => {
@@ -56,14 +72,16 @@ function Office() {
   };
 
   const handleEditSave = (id: string) => {
-    updateOfficeTask(id, {
-      title: editTitle,
-      description: editDesc,
-      priority: editPriority,
-      deadline: editDeadline,
+    updateMutation.mutate({
+      id,
+      updates: {
+        title: editTitle,
+        description: editDesc,
+        priority: editPriority,
+        deadline: editDeadline,
+      },
     });
     setEditingId(null);
-    refresh();
   };
 
   const filtered = tasks.filter((t) => {

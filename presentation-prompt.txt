@@ -1,0 +1,98 @@
+Create a visual presentation (9 slides) for a 1:1 interview about a recent project where I used AI as a development tool. The presentation should be clean, professional, and use simple diagrams/visuals. Here are the details:
+
+PROJECT OVERVIEW:
+- Title: Centralized Alerting for Streaming Data Pipelines
+- Role: Lead Developer & Owner
+- Timeline: January - February 2026
+- AI Tool Used: Cursor AI (coding assistant)
+
+CONTEXT (Slide 1-2):
+I work on a data platform team at a large streaming company. We run ~20+ Databricks streaming jobs across 5 job families that ingest data from Kafka, process it, and land it into a data lake (S3). These jobs run across 4 environments (dev, integration, staging, production) and serve multiple geographic regions (AMER, EMEA, APAC, LATAM).
+
+THE PROBLEM - BEFORE STATE (Slide 3):
+Show a messy "before" architecture diagram. Alerting was configured by hardcoding PagerDuty email notification blocks inside each job's YAML workflow file. This meant:
+- Alert config was copy-pasted and scattered across 26+ YAML files
+- 5 different job families each had their own inline PagerDuty blocks
+- No crash loop detection (flapping jobs went unnoticed)
+- No Kafka backlog monitoring (silent data delays)
+- No streaming processing rate alerts (pipeline stalls not caught)
+- Changing alerts meant editing multiple files per job, error-prone and slow
+Visual: Show many YAML files each with arrows pointing to PagerDuty, looking chaotic and hard to manage.
+
+THE SOLUTION - AFTER STATE (Slide 4):
+Show a clean "after" architecture diagram. I migrated all alerting to centralized Prometheus-based alerts managed via Terraform (infrastructure-as-code). Now:
+- All Databricks jobs emit metrics to Prometheus
+- 3 Terraform config files (one per environment: int, stg, prd) define all alerts
+- 4 alert types: task failure + crash loop detection, increasing Kafka backlog, high Kafka backlog (500K threshold), streaming processing rate stopped
+- Adding alerts for a new job = one Terraform block instead of editing multiple YAMLs
+Visual: Show jobs feeding into Prometheus, with a single Terraform config layer managing alert rules that route to PagerDuty. Clean and centralized.
+
+WHAT CHANGED - BY THE NUMBERS (Slide 5):
+Show these metrics visually (icons, counters, or a simple infographic):
+- 26 files changed total
+- 22 workflow YAML files cleaned (removed legacy alert config)
+- 3 Terraform alert config files added
+- 5 job families covered
+- 4 environments covered
+- 4 new alert types introduced
+- ~400 lines of scattered legacy config removed
+- ~500 lines of centralized Terraform config added
+
+ROLLOUT STRATEGY (Slide 6):
+Show a timeline or phased rollout visual:
+- Phase 1 (Jan 23-27): Deploy to integration env, test alerts
+- Phase 2 (Feb 5-9): Deploy to staging, validate and tune
+- Phase 3 (Feb 9-18): Deploy to production with high-urgency flags, remove all legacy PagerDuty from every file
+Show a table of environment-specific decisions:
+- Int/Stg: crash loop eval period = 5 min, no high urgency flag
+- Prod: crash loop eval period = 10 min (avoid false positives), high urgency = true
+Emphasize: incremental rollout, no production incidents.
+
+WHERE AI HELPED (Slide 7):
+This is the most important slide. Show a clear split between HUMAN DECISIONS (blue) and AI-ASSISTED TASKS (green):
+
+Human decisions (I owned these):
+- Architecture: chose Prometheus + Terraform approach
+- Alert threshold tuning (500K backlog, 5 vs 10 min crash loop window)
+- Environment-specific configuration (high urgency only in prod)
+- Rollout sequencing (int first, then stg, then prd)
+- Code review and final validation of every change
+- Risk assessment
+
+AI-assisted tasks (AI as force multiplier):
+1. Generating repetitive Terraform blocks: ~20 similar alert blocks needed, AI drafted them from a template I provided, I verified every job identifier and threshold
+2. Cross-checking consistency across 26 files: AI scanned all diffs to confirm no YAML files still referenced removed PagerDuty anchors
+3. Drafting change management documentation: AI generated structured CM write-up from PR metadata, I tailored it to team format
+
+Key message: "I used AI for the mechanical and repetitive parts. Every decision was mine. AI drafts, I review. Never ship AI output without verification."
+
+OUTCOME AND IMPACT (Slide 8):
+Show a before/after comparison table:
+Before: Alerting scattered across 26 files -> After: Single Terraform config per environment
+Before: Only basic on-failure email alerts -> After: 4 alert types (failure, crash loop, backlog, processing rate)
+Before: No crash loop detection -> After: Detected within 5-10 minutes
+Before: No Kafka backlog visibility -> After: Alerts at 500K threshold
+Before: Editing alerts = touching multiple files -> After: One Terraform variable change
+Before: No version control for alert configs -> After: Full IaC, auditable, reviewable, rollback-able
+
+LESSONS AND REFLECTION (Slide 9):
+What went well:
+- Incremental rollout prevented any production incidents
+- Terraform approach makes future alert additions trivial
+- AI saved ~2-3 hours on repetitive config generation and documentation
+
+What I would do differently:
+- Start with a Terraform module abstraction from day one
+- Add automated tests to validate alert config consistency
+
+My approach to AI:
+- Best for: repetitive generation, consistency checking, documentation drafting
+- Not for: architecture decisions, threshold tuning, risk assessment
+- Philosophy: AI drafts, I review. I decide, AI accelerates.
+
+DESIGN PREFERENCES:
+- Clean, minimal design with lots of whitespace
+- Blue for human/decision elements, green for AI-assisted elements, red for problem/before state
+- Use simple icons and diagrams, not walls of text
+- Each slide should have one clear takeaway
+- Professional but not corporate-stuffy

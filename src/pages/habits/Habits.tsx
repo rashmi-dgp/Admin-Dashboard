@@ -1,35 +1,43 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Habit } from "../../types";
 import { getHabits, addHabit, toggleHabitDay, resetHabit, deleteHabit } from "../../store";
 import "./habits.scss";
 
 function Habits() {
-  const [habits, setHabits] = useState<Habit[]>(getHabits);
+  const { data: habits = [], refetch } = useQuery({
+    queryKey: ["habits"],
+    queryFn: getHabits,
+  });
+
   const [newName, setNewName] = useState("");
   const [showCompleted, setShowCompleted] = useState(true);
 
-  const refresh = useCallback(() => setHabits(getHabits()), []);
+  const addMutation = useMutation({
+    mutationFn: (name: string) => addHabit(name),
+    onSuccess: () => refetch(),
+  });
+
+  const toggleMutation = useMutation({
+    mutationFn: ({ habitId, dayIndex }: { habitId: string; dayIndex: number }) =>
+      toggleHabitDay(habitId, dayIndex),
+    onSuccess: () => refetch(),
+  });
+
+  const resetMutation = useMutation({
+    mutationFn: (habitId: string) => resetHabit(habitId),
+    onSuccess: () => refetch(),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteHabit(id),
+    onSuccess: () => refetch(),
+  });
 
   const handleAdd = () => {
     if (!newName.trim()) return;
-    addHabit(newName.trim());
+    addMutation.mutate(newName.trim());
     setNewName("");
-    refresh();
-  };
-
-  const handleToggle = (habitId: string, dayIndex: number) => {
-    toggleHabitDay(habitId, dayIndex);
-    refresh();
-  };
-
-  const handleReset = (habitId: string) => {
-    resetHabit(habitId);
-    refresh();
-  };
-
-  const handleDelete = (habitId: string) => {
-    deleteHabit(habitId);
-    refresh();
   };
 
   const getDayNumber = (habit: Habit): number => {
@@ -63,8 +71,8 @@ function Habits() {
             </span>
           </div>
           <div className="habitActions">
-            {!completed && <button className="btnReset" onClick={() => handleReset(habit.id)}>Reset</button>}
-            <button className="btnDelete" onClick={() => handleDelete(habit.id)}>Delete</button>
+            {!completed && <button className="btnReset" onClick={() => resetMutation.mutate(habit.id)}>Reset</button>}
+            <button className="btnDelete" onClick={() => deleteMutation.mutate(habit.id)}>Delete</button>
           </div>
         </div>
 
@@ -78,7 +86,7 @@ function Habits() {
             <button
               key={i}
               className={`dayCell ${done ? "done" : ""} ${completed ? "done" : i <= currentDay ? "active" : "future"}`}
-              onClick={() => !completed && i <= currentDay && handleToggle(habit.id, i)}
+              onClick={() => !completed && i <= currentDay && toggleMutation.mutate({ habitId: habit.id, dayIndex: i })}
               title={`Day ${i + 1}`}
               disabled={completed}
             >

@@ -1,18 +1,19 @@
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from "recharts";
-import { getTasks } from "../../store";
-import { getHabits, getExpenses, getExerciseLogs, getExerciseStreak, getOfficeTasks } from "../../store";
+import { getTasks, getHabits, getExpenses, getExerciseLogs, getOfficeTasks, computeStreak } from "../../store";
 import { CATEGORY_COLORS } from "../../data";
 import "./home.scss";
 
 function Home() {
-  const tasks = useMemo(() => getTasks(), []);
-  const habits = useMemo(() => getHabits(), []);
-  const expenses = useMemo(() => getExpenses(), []);
-  const exerciseLogs = useMemo(() => getExerciseLogs(), []);
-  const officeTasks = useMemo(() => getOfficeTasks(), []);
-  const streak = useMemo(() => getExerciseStreak(), []);
+  const { data: tasks = [] } = useQuery({ queryKey: ["tasks"], queryFn: getTasks });
+  const { data: habits = [] } = useQuery({ queryKey: ["habits"], queryFn: getHabits });
+  const { data: expenses = [] } = useQuery({ queryKey: ["expenses"], queryFn: getExpenses });
+  const { data: exerciseLogs = [] } = useQuery({ queryKey: ["exerciseLogs"], queryFn: getExerciseLogs });
+  const { data: officeTasks = [] } = useQuery({ queryKey: ["officeTasks"], queryFn: getOfficeTasks });
+
+  const streak = useMemo(() => computeStreak(exerciseLogs), [exerciseLogs]);
 
   const completedTasks = tasks.filter((t) => t.status === "completed").length;
   const pendingTasks = tasks.filter((t) => t.status === "pending").length;

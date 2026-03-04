@@ -1,10 +1,15 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { DailyTask } from "../../types";
 import { getTasks, addTask, updateTask, deleteTask, today } from "../../store";
 import "./tasks.scss";
 
 function Tasks() {
-  const [tasks, setTasks] = useState<DailyTask[]>(getTasks);
+  const { data: tasks = [], refetch } = useQuery({
+    queryKey: ["tasks"],
+    queryFn: getTasks,
+  });
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "completed">("all");
@@ -13,24 +18,43 @@ function Tasks() {
   const [editTitle, setEditTitle] = useState("");
   const [editDesc, setEditDesc] = useState("");
 
-  const refresh = useCallback(() => setTasks(getTasks()), []);
+  const addMutation = useMutation({
+    mutationFn: (task: Omit<DailyTask, "id" | "createdAt">) => addTask(task),
+    onSuccess: () => refetch(),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, updates }: { id: string; updates: Partial<DailyTask> }) =>
+      updateTask(id, updates),
+    onSuccess: () => refetch(),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteTask(id),
+    onSuccess: () => refetch(),
+  });
 
   const handleAdd = () => {
     if (!title.trim()) return;
-    addTask({ title: title.trim(), description: description.trim(), status: "pending", date: today() });
+    addMutation.mutate({
+      title: title.trim(),
+      description: description.trim(),
+      status: "pending",
+      date: today(),
+    });
     setTitle("");
     setDescription("");
-    refresh();
   };
 
   const handleToggle = (id: string, current: DailyTask["status"]) => {
-    updateTask(id, { status: current === "completed" ? "pending" : "completed" });
-    refresh();
+    updateMutation.mutate({
+      id,
+      updates: { status: current === "completed" ? "pending" : "completed" },
+    });
   };
 
   const handleDelete = (id: string) => {
-    deleteTask(id);
-    refresh();
+    deleteMutation.mutate(id);
   };
 
   const startEdit = (task: DailyTask) => {
@@ -40,9 +64,8 @@ function Tasks() {
   };
 
   const handleEditSave = (id: string) => {
-    updateTask(id, { title: editTitle, description: editDesc });
+    updateMutation.mutate({ id, updates: { title: editTitle, description: editDesc } });
     setEditingId(null);
-    refresh();
   };
 
   const filtered = tasks.filter((t) => {
