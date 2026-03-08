@@ -23,6 +23,7 @@ const {
   VITE_SUPABASE_ANON_KEY: supabaseKey,
   RESEND_API_KEY: resendApiKey,
   REMINDER_EMAIL: recipientEmail,
+  APP_URL: appUrl,
 } = process.env;
 
 const missing = [];
@@ -30,6 +31,7 @@ if (!supabaseUrl) missing.push("VITE_SUPABASE_URL");
 if (!supabaseKey) missing.push("VITE_SUPABASE_ANON_KEY");
 if (!resendApiKey) missing.push("RESEND_API_KEY");
 if (!recipientEmail) missing.push("REMINDER_EMAIL");
+if (!appUrl) missing.push("APP_URL");
 
 if (missing.length) {
   console.error(`Missing env vars: ${missing.join(", ")}`);
@@ -149,6 +151,10 @@ async function fetchWeeklySummary() {
 
 // ── Morning Email Builder ───────────────────────────────────────────
 
+function dashboardBtn(color) {
+  return `<a href="${appUrl}" style="display:inline-block;margin-top:12px;padding:10px 28px;background:${color};color:#fff;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">Open Dashboard →</a>`;
+}
+
 function buildMorningEmail(date) {
   const html = `
   <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:520px;margin:auto;background:#1e293b;border-radius:12px;overflow:hidden">
@@ -184,6 +190,7 @@ function buildMorningEmail(date) {
       <div style="margin-top:24px;padding:16px;background:#334155;border-radius:8px;text-align:center">
         <p style="margin:0 0 4px;font-size:13px;color:#94a3b8">A good day starts with a plan. You've got this!</p>
         <p style="margin:0;font-size:12px;color:#64748b">Your progress report will arrive at 10 PM IST.</p>
+        ${dashboardBtn("#f59e0b")}
       </div>
 
     </div>
@@ -286,6 +293,7 @@ function buildEveningEmail(summary) {
       <div style="margin-top:16px;padding:16px;background:#334155;border-radius:8px;text-align:center">
         <p style="margin:0 0 4px;font-size:13px;color:#94a3b8">Anything missing? Open the dashboard and log it now.</p>
         <p style="margin:0;font-size:12px;color:#64748b">This report is sent daily at 10 PM IST.</p>
+        ${dashboardBtn("#6366f1")}
       </div>
 
     </div>
@@ -386,6 +394,7 @@ function buildWeeklyEmail(summary) {
       <div style="margin-top:24px;padding:16px;background:#334155;border-radius:8px;text-align:center">
         <p style="margin:0 0 4px;font-size:13px;color:#94a3b8">Review your week and plan ahead for the next one!</p>
         <p style="margin:0;font-size:12px;color:#64748b">This digest is sent every Sunday at 9 PM IST.</p>
+        ${dashboardBtn("#059669")}
       </div>
 
     </div>
