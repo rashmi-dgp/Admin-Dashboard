@@ -1,7 +1,6 @@
 import Home from "./pages/home/Home";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
-import Footer from "./components/footer/Footer";
 import Menu from "./components/menu/Menu";
 import Tasks from "./pages/tasks/Tasks";
 import Habits from "./pages/habits/Habits";
@@ -23,7 +22,6 @@ function App() {
             <Outlet />
           </div>
         </div>
-        <Footer />
       </div>
     );
   };

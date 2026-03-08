@@ -6,7 +6,11 @@ export function generateId(): string {
 }
 
 export function today(): string {
-  return new Date().toISOString().split("T")[0];
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
 }
 
 // --------------- row mappers (snake_case DB → camelCase TS) ---------------
@@ -268,7 +272,7 @@ export async function toggleExercise(date: string): Promise<void> {
   }
 }
 
-/** Pure function — computes streak from an already-fetched logs array. */
+/** Pure function — computes current streak (unbroken run ending today). */
 export function computeStreak(logs: ExerciseLog[]): number {
   const doneSet = new Set(logs.filter((l) => l.done).map((l) => l.date));
   let streak = 0;
@@ -278,6 +282,32 @@ export function computeStreak(logs: ExerciseLog[]): number {
     d.setDate(d.getDate() - 1);
   }
   return streak;
+}
+
+/** Pure function — computes the longest unbroken done-streak within a given month.
+ *  @param monthPrefix  "YYYY-MM" e.g. "2026-03"
+ */
+export function computeMonthStreak(logs: ExerciseLog[], monthPrefix: string): number {
+  const doneSet = new Set(logs.filter((l) => l.done).map((l) => l.date));
+
+  // Build ordered list of every day in the month up to today
+  const [year, month] = monthPrefix.split("-").map(Number);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const todayStr = today();
+  let best = 0;
+  let current = 0;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${monthPrefix}-${String(d).padStart(2, "0")}`;
+    if (dateStr > todayStr) break; // don't count future days
+    if (doneSet.has(dateStr)) {
+      current++;
+      if (current > best) best = current;
+    } else {
+      current = 0;
+    }
+  }
+  return best;
 }
 
 // --------------- Office Tasks ---------------

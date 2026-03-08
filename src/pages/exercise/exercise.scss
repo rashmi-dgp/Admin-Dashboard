@@ -136,11 +136,49 @@
     h3 {
       font-size: 15px;
       font-weight: 600;
-      margin-bottom: 12px;
     }
 
     @include sm {
       padding: 14px;
+    }
+  }
+
+  .chartHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .weekNav {
+    display: flex;
+    gap: 4px;
+  }
+
+  .weekNavBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid $soft-bg;
+    background: transparent;
+    color: $main-color;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+
+    &:hover:not(:disabled) {
+      border-color: #4caf50;
+      background: rgba(76, 175, 80, 0.15);
+      color: #4caf50;
+    }
+
+    &:disabled {
+      opacity: 0.25;
+      cursor: default;
     }
   }
 
@@ -153,11 +191,40 @@
     h3 {
       font-size: 15px;
       font-weight: 600;
-      margin-bottom: 14px;
     }
 
     @include sm {
       padding: 14px;
+    }
+  }
+
+  .calendarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .monthSelect {
+    background: $soft-bg;
+    color: $main-color;
+    border: 1px solid lighten($soft-bg, 10%);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:hover,
+    &:focus {
+      border-color: #4caf50;
+    }
+
+    option {
+      background: $main-bg;
     }
   }
 
@@ -193,6 +260,12 @@
     &.done {
       background: rgba(76, 175, 80, 0.2);
       border-color: #4caf50;
+    }
+
+    &.future {
+      opacity: 0.25;
+      cursor: default;
+      pointer-events: none;
     }
 
     @include sm {

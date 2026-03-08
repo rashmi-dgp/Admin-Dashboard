@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from "recharts";
-import { getTasks, getHabits, getExpenses, getExerciseLogs, getOfficeTasks, computeStreak, computeTaskStreak } from "../../store";
+import { getTasks, getHabits, getExpenses, getExerciseLogs, getOfficeTasks, computeStreak, computeTaskStreak, today } from "../../store";
 import { CATEGORY_COLORS, MONTHLY_BUDGET } from "../../data";
 import "./home.scss";
 
@@ -16,8 +16,10 @@ function Home() {
   const streak = useMemo(() => computeStreak(exerciseLogs), [exerciseLogs]);
   const taskStreak = useMemo(() => computeTaskStreak(tasks), [tasks]);
 
-  const completedTasks = tasks.filter((t) => t.status === "completed").length;
-  const pendingTasks = tasks.filter((t) => t.status === "pending").length;
+  const todayStr = today();
+  const todayTasks = useMemo(() => tasks.filter((t) => t.date === todayStr), [tasks, todayStr]);
+  const completedTasks = todayTasks.filter((t) => t.status === "completed").length;
+  const pendingTasks = todayTasks.filter((t) => t.status === "pending").length;
 
   const habitProgress = habits.length
     ? Math.round(habits.reduce((sum, h) => sum + h.progress.filter(Boolean).length, 0) / (habits.length * 21) * 100)
@@ -73,7 +75,7 @@ function Home() {
             <span className="badge streakBadge">🔥 {taskStreak} day streak</span>
           </div>
           <div className="cardBody">
-            {tasks.length > 0 ? (
+            {todayTasks.length > 0 ? (
               <ResponsiveContainer width="100%" height={120}>
                 <PieChart>
                   <Pie data={taskPieData} cx="50%" cy="50%" innerRadius={30} outerRadius={50} dataKey="value">
