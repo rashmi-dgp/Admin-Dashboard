@@ -1,0 +1,46 @@
+---
+description: Data layer conventions — Supabase, store.ts, and React Query usage
+globs: src/store.ts
+alwaysApply: false
+---
+
+# Data Layer Conventions
+
+## Golden Rule
+**All Supabase access must go through `src/store.ts`.** Never import or call `supabase` directly from a component or page.
+
+## Supabase Tables
+| Table | Entity |
+|-------|--------|
+| `daily_tasks` | DailyTask |
+| `habits` | Habit |
+| `expenses` | Expense |
+| `exercise_logs` | ExerciseLog |
+| `office_tasks` | OfficeTask |
+
+## store.ts Conventions
+- Each entity has its own CRUD functions in `store.ts`
+- DB columns are `snake_case`; map them to `camelCase` TypeScript interfaces
+- Row mappers live in `store.ts`, not in components
+- Pure helpers (`computeTaskStreak`, `computeStreak`, `today`, `generateId`) also live here
+
+## Adding a New Entity
+```ts
+// 1. Add type to src/types.ts
+// 2. Add fetch/create/update/delete functions to src/store.ts
+// 3. Map snake_case → camelCase in a row mapper in store.ts
+// 4. Use useQuery/useMutation in the component, NOT raw supabase calls
+```
+
+## Error Handling
+```ts
+// ✅ GOOD
+const { data, error } = await supabase.from("daily_tasks").select("*")
+if (error) {
+  console.error("Failed to fetch tasks", error)
+  throw error
+}
+
+// ❌ BAD — swallowing errors silently
+const { data } = await supabase.from("daily_tasks").select("*")
+```

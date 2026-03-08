@@ -1,0 +1,44 @@
+---
+description: SCSS styling conventions for the Admin Dashboard
+globs: **/*.scss
+alwaysApply: false
+---
+
+# SCSS Styling Conventions
+
+## File Organisation
+- Global styles → `src/styles/global.scss`
+- SCSS variables → `src/styles/variables.scss` (always import this for vars)
+- Breakpoint mixins → `src/styles/responsive.scss`
+- Component styles → co-located with component (e.g. `tasks.scss` next to `Tasks.tsx`)
+
+## Always Import Variables First
+```scss
+// ✅ GOOD
+@import "../../styles/variables";
+
+// ❌ BAD — hardcoding colours or values inline
+background: #2a3447;
+```
+
+## Theme Variables (use these, never hardcode)
+| Variable | Value | Usage |
+|----------|-------|-------|
+| `$main-bg` | `#2a3447` | Page/app background |
+| `$soft-bg` | `#384256` | Card/panel background |
+| `$main-color` | `white` | Primary text colour |
+
+## Breakpoints (from responsive.scss)
+`$sm` 480px · `$md` 768px · `$lg` 1024px · `$xl` 1280px · `$xxl` 1400px
+
+```scss
+// ✅ GOOD — use mixin
+@media (max-width: $md) {
+  .taskList { flex-direction: column; }
+}
+```
+
+## Class Naming
+- Use BEM-like flat class names: `.pageTitle`, `.addForm`, `.taskItem`
+- Keep class names descriptive and lowercase with camelCase for multi-word
+- Don't use deeply nested selectors (max 3 levels)

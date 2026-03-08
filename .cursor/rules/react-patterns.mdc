@@ -1,0 +1,48 @@
+---
+description: React component conventions for pages and UI components
+globs: **/*.tsx
+alwaysApply: false
+---
+
+# React Component Patterns
+
+## File Structure
+- Pages → `src/pages/<name>/<Name>.tsx` + `<name>.scss`
+- Components → `src/components/<name>/<Name>.tsx` + `<name>.scss`
+- Each file imports its own co-located `.scss`
+
+## Exports
+- Pages and layout components use **default export**
+- Import the co-located SCSS at the top of the file
+
+## State Management
+- Server state → React Query (`useQuery` / `useMutation`) — never fetch directly in components
+- Local UI state → `useState` (filters, form fields, edit mode)
+- Derived/computed values → `useMemo`
+- No Redux or Zustand — keep it simple
+
+## React Query Pattern
+```tsx
+// ✅ GOOD — query with refetch on mutation success
+const { data: tasks = [], refetch } = useQuery({
+  queryKey: ["tasks"],
+  queryFn: fetchTasks,
+})
+
+const { mutate: addTask } = useMutation({
+  mutationFn: createTask,
+  onSuccess: () => refetch(),
+})
+
+// ❌ BAD — direct Supabase call inside component
+const { data } = await supabase.from("daily_tasks").select("*")
+```
+
+## Common CSS Class Names (use these, don't invent new ones)
+- `.pageTitle` — page heading
+- `.addForm` — add/create form container
+- `.btnPrimary` — primary action button
+- `.taskList` — list of items
+- `.filters` — filter controls row
+- `.editRow` — inline edit row
+- `.empty` — empty state message

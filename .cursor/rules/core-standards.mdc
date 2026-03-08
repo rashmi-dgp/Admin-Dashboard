@@ -1,0 +1,23 @@
+---
+description: Core project standards for the Admin Dashboard productivity tracker
+alwaysApply: true
+---
+
+# Admin Dashboard — Core Standards
+
+## Project Context
+Personal productivity tracker built with React + TypeScript + Vite + Supabase.
+Tracks: daily tasks, habits (21-day), expenses, exercise logs, office tasks.
+
+## TypeScript
+- Strict mode is on — no `any` types ever
+- All shared types live in `src/types.ts` — add new ones there
+- Dates are always `YYYY-MM-DD` strings; use the `today()` helper from `src/store.ts`
+- Use the `generateId()` helper from `src/store.ts` for new record IDs
+
+## General Code Style
+- Functional components only — no class components
+- No `console.log()` in components; use `console.error()` only in catch blocks
+- Keep components focused — extract logic to `store.ts`, not inline in components
+- Currency is Indian Rupee: format with `toLocaleString("en-IN")` and `₹` prefix
+- Monthly budget constant is `MONTHLY_BUDGET` from `src/data.ts`
